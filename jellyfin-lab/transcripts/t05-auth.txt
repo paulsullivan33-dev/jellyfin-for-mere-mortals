@@ -1,0 +1,31 @@
+SIGNING IN THROUGH THE API — and a 12.2 quirk (chapter 6).
+
+Signing in is a POST that exchanges a username and password for
+a reusable access token:
+
+    POST /Users/AuthenticateByName
+    {"Username":"root","Pw":"lab-password-42"}
+
+The request must carry a client-identification header. Two
+spellings exist. In 12.2, on this build, the legacy one fails:
+
+    Header: X-Emby-Authorization: MediaBrowser Client="lab curl", ...
+    -> HTTP 400, body "Error processing request."
+    Server log: ArgumentNullException inside
+    AuthenticateNewSessionInternal, via UserController.
+
+The standard Authorization spelling of the same header works:
+
+    Header: Authorization: MediaBrowser Client="lab curl",
+           Device="build bench", DeviceId="lab-bench-01",
+           Version="12.2.0"
+    -> HTTP 200
+    {"User":{"Name":"root", "Id":"d9ff835e...", 
+             "Policy":{"IsAdministrator":true, ...}, ...},
+     "AccessToken":"<32 hex chars — a lab credential, redacted>",
+     ...}
+
+Later calls in this lab present the token inside the same
+Authorization header (Token="..."). The bare X-Emby-Token
+header was likewise refused (HTTP 401) where the full header
+was accepted — use the full form in scripts for this version.

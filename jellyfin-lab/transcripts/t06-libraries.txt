@@ -1,0 +1,26 @@
+CREATING LIBRARIES THROUGH THE API (chapter 4).
+
+First attempt — everything in the JSON body, the shape that
+looks obvious — is refused:
+
+    POST /Library/VirtualFolders
+    {"Name":"Movies","CollectionType":"movies","Paths":[...]}
+    -> HTTP 400
+
+The server's own OpenAPI document (served live at
+/api-docs/openapi.json — worth knowing it exists) shows why:
+name, collectionType and paths are QUERY parameters; the body
+carries only library options. Correct shape:
+
+    POST /Library/VirtualFolders?name=Movies&collectionType=movies
+         &paths=/home/.../media/Movies&refreshLibrary=true
+    body: {}
+    -> HTTP 204        (Movies, Music, Series all three)
+
+    GET /Library/VirtualFolders
+    Movies | movies  | ['/home/hatch/workspace/jellyfin-build/media/Movies']
+    Music  | music   | ['/home/hatch/workspace/jellyfin-build/media/Music']
+    Series | tvshows | ['/home/hatch/workspace/jellyfin-build/media/Series']
+
+refreshLibrary=true starts the first scan immediately. What the
+scan made of the specimens is transcript t07.

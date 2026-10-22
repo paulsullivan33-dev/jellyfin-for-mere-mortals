@@ -1,0 +1,33 @@
+EPISODE NUMBERS, AND THE SCAN THAT LOOKED BROKEN (chapter 5).
+
+Half an hour into the lab, the server's database said this
+about the two episodes (SQLite, data/data/jellyfin.db):
+
+    SELECT Name, IndexNumber, ParentIndexNumber FROM BaseItems
+    WHERE Type LIKE '%Episode%';
+    North Pier S01E01 - Foghorn|          |
+    North Pier - S01E02 - Low Water|      |
+
+No season number, no episode number — with a Series ("North
+Pier") and a Season already created around them. The natural
+conclusion (the naming is wrong) was wrong. The server log
+told the real story: every scan so far had been interrupted.
+
+    "Scan Media Library" Cancelled after 1 minute(s) and 6 seconds
+    ... "Scan Media Library" Cancelled after 2 minute(s) and 0 seconds
+
+Each new "scan now" request cancels the scan in progress, and
+the realtime file monitor had queued more; the final phases of
+a scan — where episodes get their numbers — never got to run.
+
+One full, uninterrupted scan later, the same query:
+
+    North Pier S01E01 - Foghorn|1|1
+    North Pier - S01E02 - Low Water|2|1
+
+Both filename shapes parse: "North Pier S01E01 - Foghorn" and
+"North Pier - S01E02 - Low Water" are both S1 episodes 1 and 2.
+Lesson kept for chapter 12: when a fresh library looks
+half-linked, check whether a scan actually FINISHED
+(Dashboard -> Scheduled Tasks, or the log) before blaming
+your filenames.

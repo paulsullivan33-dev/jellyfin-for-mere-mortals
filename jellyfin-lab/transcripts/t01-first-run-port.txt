@@ -1,0 +1,41 @@
+THE PORT SAGA — chapter 3 teaches from this.
+
+The lab wanted the server on port 8931, not the default 8096.
+Before the first run we seeded config/network.xml with the field
+name older Jellyfin versions used:
+
+    <HttpServerPortNumber>8931</HttpServerPortNumber>
+
+First start: the server came up on the DEFAULT port anyway:
+
+    $ ss -tlnp | grep jellyfin
+    LISTEN 0  0  0.0.0.0:8096  0.0.0.0:*  users:(("jellyfin",pid=19881,fd=489))
+
+The network.xml the server then wrote for itself showed why.
+Version 12.2 names the fields differently:
+
+    <InternalHttpPort>8096</InternalHttpPort>
+    <InternalHttpsPort>8920</InternalHttpsPort>
+    <PublicHttpPort>8096</PublicHttpPort>
+    <PublicHttpsPort>8920</PublicHttpsPort>
+
+(The old <HttpServerPortNumber>8931</...> line was still sitting
+in the file, preserved and ignored.)
+
+After stopping the server and editing the CURRENT field names:
+
+    $ sed -i 's|<InternalHttpPort>8096</InternalHttpPort>|<InternalHttpPort>8931</InternalHttpPort>|;
+              s|<PublicHttpPort>8096</PublicHttpPort>|<PublicHttpPort>8931</PublicHttpPort>|' config/network.xml
+    $ # restart ...
+    $ ss -tlnp | grep jellyfin
+    LISTEN 0  0  0.0.0.0:8931  0.0.0.0:*  users:(("jellyfin",pid=22408,fd=483))
+
+    $ curl -s http://localhost:8931/System/Info/Public
+    {"LocalAddress":"http://127.0.0.1:8931","ServerName":"Mere Mortals Lab",
+     "Version":"12.2.0","ProductName":"Jellyfin Server","OperatingSystem":"",
+     "Id":"eff146d9e0a04a3a8cc425d6f7917f7f","StartupWizardCompleted":true}
+
+Lessons: config files are read at startup (edit them stopped, not
+running), and a field the current version no longer uses fails
+silently — the server does not warn you. The Dashboard's
+Networking page edits these same fields from the web UI.

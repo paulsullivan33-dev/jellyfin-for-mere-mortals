@@ -1,0 +1,55 @@
+THE SETUP WIZARD, DRIVEN THROUGH THE API (chapter 3).
+The browser wizard and these calls are the same steps; the API
+route is what a script — or this lab — uses. Base: http://localhost:8096
+
+1. Read the starting configuration:
+
+    GET /Startup/Configuration
+    {"ServerName":"","UICulture":"en-US","MetadataCountryCode":"US",
+     "PreferredMetadataLanguage":"en"}
+
+2. Set name and metadata language/country:
+
+    POST /Startup/Configuration
+    {"ServerName":"Mere Mortals Lab","UICulture":"en-GB",
+     "MetadataCountryCode":"GB","PreferredMetadataLanguage":"en"}
+    -> HTTP 204
+
+   (en-GB was chosen deliberately: chapter 5 shows one place it
+   visibly changes the product — a season is labelled "Series 1".)
+
+3. The first user. Version 12.2 pre-creates an administrator
+   named "root"; the wizard step SETS ITS NAME AND PASSWORD
+   rather than creating a user from nothing. Asking first:
+
+    GET /Startup/FirstUser
+    {"Name":"root"}
+
+   Posting a different name fails, honestly and unhelpfully:
+
+    POST /Startup/User  {"Name":"keeper","Password":"..."}
+    -> HTTP 404  {"title":"Not Found","status":404, ...}
+
+   Posting the name that exists works:
+
+    POST /Startup/User  {"Name":"root","Password":"lab-password-42"}
+    -> HTTP 204
+
+4. Remote access choices (automatic port mapping declined):
+
+    POST /Startup/RemoteAccess
+    {"EnableRemoteAccess":true,"EnableAutomaticPortMapping":false}
+    -> HTTP 204
+
+5. Finish:
+
+    POST /Startup/Complete
+    -> HTTP 204
+
+    GET /System/Info/Public  (afterwards)
+    {..., "ServerName":"Mere Mortals Lab", ...,
+     "StartupWizardCompleted":true}
+
+After the wizard, the /Startup/* door closes: the same calls
+without an administrator token now answer HTTP 401 (checked),
+which is the correct behaviour for a one-time door.

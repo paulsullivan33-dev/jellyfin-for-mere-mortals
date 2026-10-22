@@ -1,0 +1,16 @@
+FROM THE SERVER'S STARTUP LOG (its own diary, one file per day).
+
+[2026-10-22 02:38:35.750 +00:00] [INF] [4] Main: Jellyfin version: "12.2.0"
+[2026-10-22 02:38:52.487 +00:00] [INF] [11] MediaBrowser.MediaEncoding.Encoder.MediaEncoder: Found ffmpeg version "8.1.2"
+[2026-10-22 02:38:56.229 +00:00] [INF] [11] MediaBrowser.MediaEncoding.Encoder.MediaEncoder: FFmpeg: "/usr/bin/ffmpeg"
+
+The encoders the adopted ffmpeg "offers" — one startup line, complete:
+[2026-10-22 02:38:52.633 +00:00] [INF] [11] MediaBrowser.MediaEncoding.Encoder.MediaEncoder: Available "encoders": ["libsvtav1", "av1_nvenc", "av1_qsv", "av1_vaapi", "libx264", "h264_nvenc", "h264_qsv", "h264_v4l2m2m", "h264_vaapi", "libx265", "hevc_nvenc", "hevc_qsv", "hevc_vaapi", "mjpeg_qsv", "mjpeg_vaapi", "aac", "ac3", "alac", "dca", "flac", "libmp3lame", "libopus", "truehd", "libvorbis", "srt"]
+
+Hardware acceleration types it names in the same breath:
+[2026-10-22 02:38:54.142 +00:00] [INF] [11] MediaBrowser.MediaEncoding.Encoder.MediaEncoder: Available hwaccel types: ["vdpau", "cuda", "vaapi", "qsv", "drm", "opencl"]
+
+And the honest counterweight, two warnings from the same minute —
+a name in a list is not hardware on the desk:
+[2026-10-22 02:38:52.853 +00:00] [WRN] [11] MediaBrowser.MediaEncoding.Encoder.MediaEncoder: Filter: "tonemap_cuda" with option "GPU accelerated HDR to SDR tonemapping" is not available
+[2026-10-22 02:38:53.232 +00:00] [WRN] [11] MediaBrowser.MediaEncoding.Encoder.MediaEncoder: Filter: "overlay_vulkan" with option "Action to take when encountering EOF from secondary input" is not available

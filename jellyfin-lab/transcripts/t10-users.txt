@@ -1,0 +1,30 @@
+A SECOND USER, AND WHAT A POLICY DOES (chapter 6).
+
+    POST /Users/New  {"Name":"guest","Password":"guest-view-42"}
+    -> HTTP 200, new user id 302f2ae83dde46fc871789f13aae030c
+
+A new user starts out seeing everything the admin sees.
+Signed in as guest, a recursive listing of the library:
+
+    guest sees 12 items — both movies, the album and its tracks,
+    the series, its season, both episodes, three library folders.
+
+Restricting the account: in 12.2 the policy is read from the
+user object (GET /Users/<id> -> "Policy"), edited, and posted
+back to POST /Users/<id>/Policy. The two fields that matter:
+
+    "EnableAllFolders": false,
+    "EnabledFolders": ["<the Movies library's id>"]
+
+    POST /Users/<guest>/Policy  -> HTTP 204
+
+The same guest listing afterwards:
+
+    guest sees 3 items
+      Movie  | The Clockwork Lighthouse
+      Movie  | A Field Guide to Clouds
+      Folder | Movies
+
+Music and Series are not greyed out or locked — to this user
+they do not exist. That absence is the access control working
+as intended, and it is per-user: the admin's view is unchanged.

@@ -1,0 +1,15 @@
+THE SERVER'S OWN PROBE OF A SPECIMEN (chapter 5).
+GET /Users/<admin>/Items/<the Clockwork Lighthouse item>:
+
+    Name: The Clockwork Lighthouse | Year: 2021
+    RuntimeTicks: 60000000            (= 6.0 seconds)
+     stream: Video h264 1280x720 3010332 bits/s
+     stream: Audio aac 69447 bits/s
+
+The year came from the "(2021)" in the filename — the file has
+no year tag inside it. The stream figures agree with ffprobe's
+independent reading of the same file (transcript t04): two
+probes, one file, same numbers. This probing is what Jellyfin
+does to every file in every library on every scan; it is how
+the server knows what a client can be sent directly and what
+must be transcoded (chapter 7).

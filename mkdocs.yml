@@ -1,0 +1,24 @@
+site_name: Jellyfin for Mere Mortals
+site_description: Plain-language self-hosted media serving. Your own films, music and series on your own server, libraries and naming that make matching work, users and access, transcoding without the magic, clients, backups, and honest limits.
+site_url: https://paulsullivan33-dev.github.io/jellyfin-for-mere-mortals/
+
+# Guides live at the repo root (nice for GitHub browsing).
+# The deploy workflow copies them into docs/ before building.
+theme:
+  name: material
+
+nav:
+  - Home: index.md
+  - The Idea: the-idea.md
+  - Install Shapes: install-shapes.md
+  - First Setup: first-setup.md
+  - Libraries and Naming: libraries-and-naming.md
+  - Metadata, Honestly: metadata-honestly.md
+  - Users and Access: users-and-access.md
+  - Transcoding in Plain Terms: transcoding.md
+  - Clients: clients.md
+  - Backing Up the Server: backing-up.md
+  - Troubleshooting: troubleshooting.md
+  - Limits and Neighbours: limits-and-neighbours.md
+  - Glossary: glossary.md
+  - Writing Criteria: criteria.md

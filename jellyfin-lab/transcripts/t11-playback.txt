@@ -1,0 +1,57 @@
+THREE WAYS A FILE LEAVES THE SERVER (chapter 7).
+All against "The Clockwork Lighthouse (2021).mp4":
+source file 2,317,873 bytes, h264 1280x720 at 3,010 kb/s + AAC.
+
+1. DIRECT PLAY — the file, untouched.
+
+    GET /Videos/<id>/stream.mp4?Static=true
+    -> HTTP 200, 2,317,873 bytes downloaded.
+    Byte count identical to the file on disk. Nothing was
+    decoded or re-encoded; the server was a file server.
+
+2. REMUX / PARTIAL TRANSCODE — one stream fixed, one copied.
+
+    GET /Videos/<id>/stream.mp4?MaxStreamingBitrate=250000
+        &VideoBitRate=200000&AudioBitRate=48000
+    -> HTTP 200, 2,298,542 bytes.
+    ffprobe of the download: video still 1280x720 at 3,010 kb/s;
+    audio now AAC at 48 kb/s.
+    The server's log shows the actual ffmpeg it ran:
+
+    "/usr/bin/ffmpeg" ... -i file:".../The Clockwork Lighthouse (2021).mp4"
+      -codec:v:0 copy ... -codec:a:0 aac -ac 1 -ab 48000
+      -f mp4 .../cache/transcodes/78490e932d3a41a7bf0dbc3d3e69f707.mp4"
+
+    "-codec:v:0 copy" is the tell: a bitrate request does NOT
+    force the video to be re-encoded. Jellyfin converts what
+    must be converted, stream by stream.
+
+3. FULL VIDEO TRANSCODE — asking as a small client asks.
+
+    Through PlaybackInfo with a device profile capped at
+    300,000 bits/s and 426 px wide, the server answered with a
+    transcoding URL whose own parameters give its reasoning:
+
+      TranscodeReasons=ContainerBitrateExceedsLimit
+      VideoBitrate=230553, MaxWidth=426
+
+    The HLS master playlist it served:
+
+      #EXT-X-STREAM-INF:BANDWIDTH=300000, ..., RESOLUTION=426x240
+      main.m3u8?...&VideoBitrate=230553&MaxWidth=426&...
+
+    Segment 0, downloaded and probed:
+
+      Video: h264, yuv420p, 426x238, 30 fps
+      Audio: aac, 44100 Hz, mono, 71 kb/s
+
+    And the ffmpeg line in the server log this time:
+
+      -codec:v:0 libx264 "setparams=...,scale=trunc(min(max(iw,ih*a),426)/2)*2:
+      trunc(ow/a/2)*2,format=yuv420p" -codec:a:0 ...
+
+    1280x720 in, 426x238 out, re-encoded by libx264 in
+    software — this sandbox has no GPU, so every transcoded
+    frame was CPU work. That cost is chapter 7's hardware
+    caveat, measured here on a 6-second clip: trivial. On a
+    two-hour film it is the whole question.

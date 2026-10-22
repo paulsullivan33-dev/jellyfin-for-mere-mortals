@@ -1,0 +1,48 @@
+$ ./jellyfin --version
+Jellyfin.Server 12.2.0.0
+
+$ ./jellyfin --help
+Jellyfin.Server 12.2.0.0
+Copyright ©  2019 Jellyfin Contributors. Code released under the GNU General Public License
+
+  -d, --datadir             Path to use for the data folder (database files,
+                            etc.).
+
+  --nowebclient             Indicates that the web server should not host the
+                            web client.
+
+  -w, --webdir              Path to the Jellyfin web UI resources.
+
+  -C, --cachedir            Path to use for caching.
+
+  -c, --configdir           Path to use for configuration data (user settings
+                            and pictures).
+
+  -l, --logdir              Path to use for writing log files.
+
+  --ffmpeg                  Path to external FFmpeg executable to use in place
+                            of default found in PATH.
+
+  --service                 Run as headless service.
+
+  --package-name            Used when packaging Jellyfin (example, synology).
+
+  --published-server-url    Jellyfin Server URL to publish via auto discover
+                            process
+
+  --nonetchange             Indicates that the server should not detect network
+                            status change.
+
+  --restore-archive         Path to a Jellyfin backup archive to restore from
+
+  --mode                    Mode which selects what action the jellyfin server
+                            should perform when started.
+
+  --help                    Display this help screen.
+
+  --version                 Display version information.
+
+(The binary is the portable linux-amd64 build from Jellyfin's own
+repository, repo.jellyfin.org, file jellyfin_12.2-amd64.tar.xz,
+SHA-256 as downloaded on the build bench:
+cfa4a6afb24dac543cf73419305772937f96df8f537f2bd221587e224875c4b7)

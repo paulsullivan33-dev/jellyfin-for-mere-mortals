@@ -1,0 +1,64 @@
+The lab — one server, five small files
+====================================================================
+
+The lab is the real thing, run small. The official Jellyfin
+server (portable linux-amd64 build of version 12.2.0, from
+repo.jellyfin.org) ran headless on the build machine with its
+data, config, cache and logs in one throwaway directory, using
+the system ffmpeg 8.1.2. Nothing was installed system-wide and
+nothing outside that directory was touched.
+
+    server    Jellyfin 12.2.0, bound to port 8931 (chapter 3
+              explains what it took to move it off 8096)
+    admin     "root" — the first-user account 12.2 pre-creates,
+              password set through the setup wizard's API
+    guest     a second, non-admin account used to prove what
+              per-user library access actually does
+
+The media is a specimen library of five generated files —
+test-pattern films, sine-tone music, two short episodes — all
+invented titles, built by examples/specimen-library.sh. They
+are small on purpose: the point is that probing, scanning,
+naming and transcoding behave the same on a 6-second clip as
+on a feature film, and 6 seconds is enough to prove each one.
+
+What the lab verified, in one breath: the server serves its
+version publicly; the setup wizard completes through its API;
+three library types scan and organise the specimens (films by
+filename year, music by embedded tags, episodes by folder and
+SxxEyy names); a second user can be fenced into one library;
+playback comes in three honest flavours — the untouched file,
+a per-stream fix, and a genuine re-encode at a smaller size.
+
+The lab's two best lessons were accidents. A scan repeatedly
+cancelled (by the operator's own repeated "scan now" clicks)
+left episodes looking unnumbered for half an hour; and a
+bitrate cap turned out to re-encode only the audio, the video
+copied untouched. Both are written up where they belong —
+chapters 5, 7 and 10 — because both will happen to you.
+
+The transcript index (jellyfin-lab/transcripts/):
+
+    t00  --version and --help of the portable binary
+    t01  the port saga: an ignored old field name, then 8931
+    t02  /System/Info/Public before the wizard
+    t03  the setup wizard through its API, 404 included
+    t04  the specimen library: tree, tags, ffprobe
+    t05  signing in: the Authorization header, and the one
+         that fails in 12.2
+    t06  creating libraries: query parameters, not a body
+    t07  the settled library: all 12 items, with paths
+    t08  the server's own probe of the largest specimen
+    t09  episode numbers: empty, then right, and why
+    t10  a guest user, fenced into one library (12 items -> 3)
+    t11  playback three ways: direct, remuxed, transcoded
+    t12  startup log excerpts: ffmpeg adopted, encoders and
+         hardware-acceleration names it offers
+
+Not run, and therefore not claimed anywhere in the chapters:
+hardware transcoding (no GPU or media engine on the bench —
+the one full transcode was software libx264 on 2 CPU cores),
+any television or phone app, remote access from outside a
+network, and the metadata providers' artwork for real films
+(the specimens are invented, so there was nothing to fetch).
+criteria.md keeps the full ledger.

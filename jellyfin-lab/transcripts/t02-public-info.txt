@@ -1,0 +1,15 @@
+$ curl -s http://localhost:8096/System/Info/Public | python3 -m json.tool
+{
+    "LocalAddress": "http://127.0.0.1:8096",
+    "ServerName": "htch-runtime",
+    "Version": "12.2.0",
+    "ProductName": "Jellyfin Server",
+    "OperatingSystem": "",
+    "Id": "eff146d9e0a04a3a8cc425d6f7917f7f",
+    "StartupWizardCompleted": false
+}
+
+Notes: this endpoint needs no login — it is what apps use to find
+and identify a server. ServerName starts as the machine's hostname
+("htch-runtime" here) until the setup wizard sets a real one.
+StartupWizardCompleted is false on a fresh server.

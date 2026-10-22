@@ -1,0 +1,40 @@
+The lab's working commands, in the order you'd run them.
+Base URL after chapter 3's port change: http://localhost:8931
+(before it: 8096). $TOKEN is the access token from signing in;
+$H is the full client header from transcript t05.
+
+Run the portable server, all state in one directory:
+
+    ./jellyfin -d $LAB/data -c $LAB/config -C $LAB/cache \
+        -l $LAB/logs --ffmpeg /usr/bin/ffmpeg
+
+Ask any server who it is (no login needed):
+
+    curl -s http://localhost:8931/System/Info/Public
+
+Sign in and keep the token:
+
+    curl -s -X POST http://localhost:8931/Users/AuthenticateByName \
+        -H 'Authorization: MediaBrowser Client="lab curl", Device="build bench", DeviceId="lab-bench-01", Version="12.2.0"' \
+        -H 'Content-Type: application/json' \
+        -d '{"Username":"root","Pw":"lab-password-42"}'
+
+List the libraries:
+
+    curl -s http://localhost:8931/Library/VirtualFolders -H "$H"
+
+Ask for everything, recursively (the check that a scan worked):
+
+    curl -s "http://localhost:8931/Users/<user-id>/Items?Recursive=true" -H "$H"
+
+Start a scan and then LEAVE IT ALONE until it finishes:
+
+    curl -s -X POST http://localhost:8931/Library/Refresh -H "$H"
+
+Read the server's own record of an item's streams:
+
+    curl -s "http://localhost:8931/Users/<user-id>/Items/<item-id>" -H "$H"
+
+When in doubt, read the server's own documentation of itself:
+
+    curl -s http://localhost:8931/api-docs/openapi.json

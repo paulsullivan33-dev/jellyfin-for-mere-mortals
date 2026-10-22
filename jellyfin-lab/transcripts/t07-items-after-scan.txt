@@ -1,0 +1,25 @@
+GET /Users/<admin>/Items?Recursive=true  ->  12 items
+Folder       Movies
+             /home/hatch/workspace/jellyfin-build/media/Movies
+Movie        A Field Guide to Clouds
+             /home/hatch/workspace/jellyfin-build/media/Movies/A Field Guide to Clouds (2019).mp4
+Movie        The Clockwork Lighthouse
+             /home/hatch/workspace/jellyfin-build/media/Movies/The Clockwork Lighthouse (2021).mp4
+Folder       Music
+             /home/hatch/workspace/jellyfin-build/media/Music
+MusicAlbum   Harbour Lights
+             /home/hatch/workspace/jellyfin-build/media/Music/Harbour Lights
+Audio        First Light
+             /home/hatch/workspace/jellyfin-build/media/Music/Harbour Lights/01 - First Light.flac
+Audio        Low Tide
+             /home/hatch/workspace/jellyfin-build/media/Music/Harbour Lights/02 - Low Tide.flac
+Folder       Series
+             /home/hatch/workspace/jellyfin-build/media/Series
+Series       North Pier
+             /home/hatch/workspace/jellyfin-build/media/Series/North Pier
+Season       Series 1
+             /home/hatch/workspace/jellyfin-build/media/Series/North Pier/Season 01
+Episode      North Pier - S01E02 - Low Water
+             /home/hatch/workspace/jellyfin-build/media/Series/North Pier/Season 01/North Pier - S01E02 - Low Water.mp4
+Episode      North Pier S01E01 - Foghorn
+             /home/hatch/workspace/jellyfin-build/media/Series/North Pier/Season 01/North Pier S01E01 - Foghorn.mp4

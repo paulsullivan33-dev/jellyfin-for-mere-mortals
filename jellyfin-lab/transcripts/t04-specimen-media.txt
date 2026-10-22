@@ -1,0 +1,37 @@
+THE SPECIMEN LIBRARY — everything invented, everything real.
+
+The files are a few seconds each, generated with ffmpeg's test
+sources so that probing, scanning and transcoding all meet honest
+media. The full generator script is examples/specimen-library.sh;
+the tree it builds:
+
+    media/
+      Movies/
+        The Clockwork Lighthouse (2021).mp4    testsrc2, 1280x720
+        A Field Guide to Clouds (2019).mp4     smptebars, 640x360
+      Music/
+        Harbour Lights/                        (a folder per album)
+          01 - First Light.flac                sine 523 Hz, tagged
+          02 - Low Tide.flac                   sine 392 Hz, tagged
+      Series/
+        North Pier/                            (a folder per show)
+          Season 01/                           (a folder per season)
+            North Pier S01E01 - Foghorn.mp4
+            North Pier - S01E02 - Low Water.mp4
+
+The FLAC files carry their metadata inside the file, written by
+ffmpeg at creation: title, artist "The Paper Boats", album
+"Harbour Lights", track numbers 1 and 2, year 2018. Chapter 5
+shows the server reading those tags back out.
+
+ffprobe, on the largest specimen (the lab's own measuring, before
+Jellyfin ever saw the file):
+
+    $ ffprobe "The Clockwork Lighthouse (2021).mp4"
+    Duration: 00:00:06.00, start: 0.000000, bitrate: 3090 kb/s
+    Stream #0:0: Video: h264 (High), yuv420p, 1280x720, 3010 kb/s, 30 fps
+    Stream #0:1: Audio: aac (LC), 44100 Hz, mono, 69 kb/s
+
+Compare with transcript t08: the server's own probe of the same
+file agrees — h264, 1280x720, 3,010,332 bits/s video, 69,447
+bits/s audio, 6.0 seconds (60,000,000 runtime ticks).
